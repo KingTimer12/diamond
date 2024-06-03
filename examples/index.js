@@ -1,4 +1,4 @@
-const { start, routes } = require("../dist/index")
+const { start, routes } = require("diamond")
 // const index = require("./routes")
 
 routes()

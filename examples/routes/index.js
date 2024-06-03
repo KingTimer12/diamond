@@ -1,4 +1,4 @@
-const { useRoute } = require("../../dist/index")
+const { useRoute } = require("diamond")
 const { hello } = require("./test/hello_wold")
 
 useRoute('/hello', hello)
