@@ -1,6 +1,7 @@
 {
   "name": "diamond",
   "version": "1.0.0",
+  "type": "module",
   "description": "A Node.js library that helpful in creation of RestAPI",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,7 +9,7 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint ./src",
-    "build": "tsc && node examples/index.js",
+    "build": "babel src --out-dir dist --extensions .ts && node example/index.js",
     "prepublishOnly": "npm run build"
   },
   "license": "MIT",
@@ -19,6 +20,9 @@
     "!src/*.spec.js"
   ],
   "devDependencies": {
+    "@babel/cli": "^7.24.6",
+    "@babel/core": "^7.24.6",
+    "@babel/preset-typescript": "^7.24.6",
     "@types/node": "^20.12.12",
     "@typescript-eslint/eslint-plugin": "^7.10.0",
     "@typescript-eslint/parser": "^7.10.0",

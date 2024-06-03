@@ -7,3 +7,7 @@ declare module 'fastify' {
         setupBase<T extends AbstractBaseRoute, K extends AbstractBaseController> (controller: new () => K, secutiry?: boolean, route?: new (server: FastifyInstance) => T): void
     }
 }
+
+export interface ESModule {
+    default: unknown
+}

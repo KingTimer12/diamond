@@ -1,0 +1,1 @@
+export * from "./_hello_wold.js"

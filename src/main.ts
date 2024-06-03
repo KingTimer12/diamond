@@ -17,16 +17,18 @@ export function start(options: FastifyListenOptions) {
             console.log(`${chalk.white("API is running in port:")} ${chalk.cyan(`${options.port}`)}`)
             console.log(`${chalk.white("Host to quick access:")} ${chalk.cyan(`http://${options.host}:${options.port}`)}`)
         })
-        
     })
 }
 
 export function routes(options: RoutesOptions): void {
-    queue.push(options)
+    console.log(options)
+    if (!options)
+        queue.push(options)
 }
 
 export function useRoute(path: string, callback: FastifyPluginCallback): void {
     const { addRoute } = RouteController()
+    console.log("use")
     addRoute(path, callback)
 }
 
@@ -39,19 +41,25 @@ const server: FastifyInstance = Fastify()
 async function build() {
     await server.register(routesPlugin)
     await server.register(baseRoutesPlugin)
-    for (const q of queue) {
-        await createRoutes(q)
-    }
+    console.log(queue)
+    if (queue.length)
+        for (const q of queue)
+            await createRoutes(q)
+    else
+        await createRoutes()
     await server.ready()
     return server
 }
 
-async function createRoutes(options: RoutesOptions) {
+async function createRoutes(options?: RoutesOptions) {
     if (!server.useRoute)
         return
-    const { useRouteIndex, useRouteSet } = RouteManager()
+    const { useRouteIndex, useRouteManager, useRouteSet } = RouteManager()
+    // console.log(options)
     if (options?.index) {
         await useRouteIndex(server, options.index)
+    } else if (options?.managerFile) {
+        await useRouteManager(server, options.managerFile)
     } else {
         await useRouteSet(server)
     }

@@ -1,5 +1,5 @@
-const { useRoute } = require("diamond")
-const { hello } = require("./test/hello_wold")
+import { useRoute } from "diamond"
+import { hello } from "./test"
 
 useRoute('/hello', hello)
 

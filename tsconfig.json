@@ -1,14 +1,25 @@
 {
-    "compilerOptions": {
-      "target": "es6",
-      "esModuleInterop": true,
-      "forceConsistentCasingInFileNames": true,
-      "module": "commonjs",
-      "noImplicitAny": true,
-      "rootDir": "./src",
-      "outDir": "dist",
-      "declaration": true
-    },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules", "**/*.spec.ts"]
-  }
+  "compilerOptions": {
+    "target": "ESNext",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "noImplicitAny": true,
+    "rootDir": "./src",
+    "outDir": "dist",
+    "declaration": true,
+    "strict": true,
+    "useUnknownInCatchVariables": false,
+    "skipLibCheck": true,
+    "strictPropertyInitialization": false,
+    "allowImportingTsExtensions": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ],
+}

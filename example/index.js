@@ -1,5 +1,4 @@
-const { start, routes } = require("diamond")
-// const index = require("./routes")
+import { start, routes } from "diamond"
 
-routes()
+routes({ managerFile: 'example/routes' })
 start({ port: 3030 })
