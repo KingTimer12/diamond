@@ -1,5 +1,5 @@
 const { start, routes } = require("../dist/index")
-const index = require("./routes")
+// const index = require("./routes")
 
-routes({ index })
+routes()
 start({ port: 3030 })

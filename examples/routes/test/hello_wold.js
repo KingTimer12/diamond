@@ -1,7 +1,10 @@
+/**
+ * 
+ * @param {import("fastify").FastifyInstance} fastify 
+ */
 function hello(fastify, opts, next) {
-    fastify.get("/", (req, res) => {
-        return res.status(200).send({ message: "hello world" })
-    })
+    // fastify.setupBase()
+    fastify.get("/", null)
 
     next()
 }
