@@ -5,15 +5,11 @@ const RouteManager = () => {
         // TODO
     }
 
-    function useRouteIndex(app: FastifyInstance, index: any) {
-        app.register(index)
+    async function useRouteIndex(app: FastifyInstance, index: any) {
+        await app.register(index)
     }
 
     return { useRouteIndex, useRoutePath }
-}
-
-const RouteController = () => {
-    
 }
 
 export { RouteManager }

@@ -12,11 +12,14 @@ function useRoute(server: FastifyInstance, path: string, callback: FastifyPlugin
 
 const Routes: FastifyPluginCallback<RoutesOptions> = (
     server: FastifyInstance,
-    options: FastifyPluginOptions
+    options: FastifyPluginOptions,
+    done
 ) => {
     server.decorate('useRoute', (path: string, callback: FastifyPluginCallback): void => {
         useRoute(server, path, callback, options.prefix)
     })
+
+    done()
 }
 
 export default fp(Routes)
