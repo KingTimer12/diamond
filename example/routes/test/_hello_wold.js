@@ -4,11 +4,11 @@ import { useBaseRoute } from 'diamond'
 /**
  * @param {import("fastify").FastifyInstance} fastify 
  */
-function hello(fastify, opts, next) {
+function route(fastify, opts, next) {
     useBaseRoute(fastify)
     // useBaseRoute(fastify, BaseController) Use if you don't use setupBase
     // fastify.get("/", (req, res) => res.status("200").send("abc")) Manual use
     next()
 }
 
-export { hello }
+export { route as hello }

@@ -15,10 +15,16 @@ var baseDefault: IBaseDefault = {
 }
 
 /*
+CLASS FATHER
+*/
+
+interface DiamondTools {}
+
+/*
 ROUTE TYPES
 */
 
-export abstract class AbstractBaseRoute {
+export abstract class AbstractBaseRoute implements DiamondTools {
     protected server: FastifyInstance
 
     constructor(server: FastifyInstance) {
@@ -43,7 +49,7 @@ export class BaseRoute extends AbstractBaseRoute {
 CONTROLLER TYPES
 */
 
-export abstract class AbstractBaseController {
+export abstract class AbstractBaseController implements DiamondTools {
     // CRUD
     public abstract create(request: FastifyRequest, reply: FastifyReply): void
     public abstract fetchAll(request: FastifyRequest, reply: FastifyReply): void
@@ -70,16 +76,20 @@ export class EmptyBaseController extends AbstractBaseController {
     }
 }
 
-export function useBaseRoute<R extends AbstractBaseRoute, C extends AbstractBaseController> 
-    (server: FastifyInstance, controller?: new () => C, secutiry: boolean = false, route?: new (server: FastifyInstance) => R): void {
+/*
+EXTERN FUNCTIONS
+*/
+
+export function useController<R extends AbstractBaseRoute, C extends AbstractBaseController> 
+    (server: FastifyInstance, controller?: new () => C, secutiry: boolean = false, route?: new (server: FastifyInstance) => R) {
         const RouteDefaultClass = baseDefault.route ? baseDefault.route() : BaseRoute
         console.log(RouteDefaultClass)
-        const instance = route ? new route(server) : new RouteDefaultClass(server)
+        const routeInstance = createInstance(route, server)
         const ControllerDefaultClass = baseDefault.controller && baseDefault.controller()
         if (!controller && ControllerDefaultClass)
-            instance.setup(ControllerDefaultClass, secutiry)
+            routeInstance.setup(ControllerDefaultClass, secutiry)
         else if (controller)
-            instance.setup(controller, secutiry)
+            routeInstance.setup(controller, secutiry)
 }
 
 export function setupBase(options: IBaseDefault) {
@@ -91,4 +101,10 @@ export function setupBase(options: IBaseDefault) {
     else if (options.route != baseDefault.route)
         baseDefault.route = options.route
     console.log(baseDefault)
+}
+
+function createInstance<Tools extends DiamondTools>(tool?: new (...params: any) => Tools, ...params: any): Tools {
+    if (!tool)
+        throw Error("Tool can't be undefined or null.")
+    return new tool(...params)
 }
