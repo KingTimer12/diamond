@@ -1,5 +1,5 @@
 import { start, routes, useRoute } from "./main.js"
-import { AbstractBaseController, AbstractBaseRoute } from "./plugin/base/baseClass.js"
+import { AbstractBaseController, AbstractBaseRoute, useBaseRoute } from "./baseClass.js"
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -12,5 +12,6 @@ export {
     routes,
     useRoute,
     AbstractBaseController,
-    AbstractBaseRoute
+    AbstractBaseRoute,
+    useBaseRoute
 };

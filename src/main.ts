@@ -4,7 +4,6 @@ import chalk from "chalk";
 import { RoutesOptions } from './types/routes.js'
 import { RouteManager, RouteController } from './route-manager.js'
 import routesPlugin from './plugin/routes.js'
-import baseRoutesPlugin from './plugin/baseRoutes.js'
 
 const queue: RoutesOptions[] = []
 
@@ -39,7 +38,6 @@ const server: FastifyInstance = Fastify()
 
 async function build() {
     await server.register(routesPlugin)
-    await server.register(baseRoutesPlugin)
     if (queue.length)
         for (const q of queue)
             await createRoutes(q)

@@ -31,7 +31,7 @@ const RouteManager = () => {
                 const dir = relative(__dirname, managerFile)
                 const path = join(dir, archive.name)
                 const file: ESModule = await import(path)
-                if (!file) {
+                if (file) {
                     await useRouteSet(app)
                     break
                 }
@@ -57,9 +57,7 @@ const RouteController = () => {
         options: FastifyPluginOptions,
         done: () => void
     ) {
-        console.log(routes)
         for (const route of routes) {
-            console.log(route)
             server.useRoute(route.path, route.callback)
         }
         routes.clear()
