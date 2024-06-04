@@ -6,6 +6,10 @@ declare module 'fastify' {
     }
 }
 
+type ESClass = {
+    prototype: unknown
+}
+
 export interface ESModule {
-    default: unknown
+    default: ESClass
 }

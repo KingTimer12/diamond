@@ -1,10 +1,14 @@
-import { start, routes } from "diamond"
+import { start, routes, setupBase } from "diamond"
+import BaseController from "./controller/base.js"
+import CustomBaseRoute from "./routes/base.js"
 
-let test = new String("123");
-console.log(test.toString()); // logs 123
-console.log(test.substring(0)); // logs 123
-String.prototype.substring = function(){ return "hahanope"; }
-console.log(test.substring(0)); // logs hahanope
-
+setupBase({
+    controller() {
+        return BaseController
+    },
+    route() {
+        return CustomBaseRoute
+    }
+})
 routes({ managerFile: 'example/routes' })
 start({ port: 3030 })

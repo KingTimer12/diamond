@@ -1,4 +1,4 @@
-import fastify, { FastifyInstance, FastifyPluginCallback, FastifyPluginOptions } from 'fastify'
+import { FastifyInstance, FastifyPluginCallback, FastifyPluginOptions } from 'fastify'
 import fp from 'fastify-plugin'
 
 interface RoutesOptions {

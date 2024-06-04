@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyPluginCallback, FastifyPluginOptions } from 'fa
 import { readdir } from 'node:fs/promises';
 import { relative, join } from "node:path";
 import { ESModule } from './types/geral.js';
+import { AbstractBaseRoute } from './baseClass.js';
 
 const routes = new Set<{ path: string, callback: FastifyPluginCallback }>()
 
@@ -32,6 +33,8 @@ const RouteManager = () => {
                 const path = join(dir, archive.name)
                 const file: ESModule = await import(path)
                 if (file) {
+                    if (file.default?.prototype instanceof AbstractBaseRoute)
+                        continue
                     await useRouteSet(app)
                     break
                 }
