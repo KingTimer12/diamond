@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyPluginCallback, FastifyPluginOptions } from 'fastify'
 import { readdir } from 'node:fs/promises';
 import { relative, join } from "node:path";
-import { ESModule } from './types/geral';
+import { ESModule } from './types/geral.js';
 
 const routes = new Set<{ path: string, callback: FastifyPluginCallback }>()
 
@@ -20,17 +20,21 @@ const RouteManager = () => {
             withFileTypes: true,
         });
 
-        console.log(mainDir)
         for (const archive of mainDir) {
             if (archive.isDirectory())
                 await useRouteManager(app, join(managerFile, archive.name))
             else if (archive.isFile()) {
                 if (archive.name.startsWith("_"))
                     return
-                const path = relative(__dirname, managerFile);
-                const file: ESModule = await import(join(path, archive.name))
-                if (!file)
+                if (!(archive.name.endsWith(".js") || archive.name.endsWith(".ts")))
+                    continue
+                const dir = relative(__dirname, managerFile)
+                const path = join(dir, archive.name)
+                const file: ESModule = await import(path)
+                if (!file) {
                     await useRouteSet(app)
+                    break
+                }
             }
         }
     }
@@ -46,7 +50,6 @@ const RouteManager = () => {
 const RouteController = () => {
     function addRoute(path: string, callback: FastifyPluginCallback) {
         routes.add({ path, callback })
-        console.log(routes)
     }
 
     function registerRoutes (
@@ -54,8 +57,9 @@ const RouteController = () => {
         options: FastifyPluginOptions,
         done: () => void
     ) {
-        // console.log(routes)
+        console.log(routes)
         for (const route of routes) {
+            console.log(route)
             server.useRoute(route.path, route.callback)
         }
         routes.clear()

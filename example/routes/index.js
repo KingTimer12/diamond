@@ -1,5 +1,5 @@
 import { useRoute } from "diamond"
-import { hello } from "./test"
+import { hello } from "./test/index.js"
 
 useRoute('/hello', hello)
 

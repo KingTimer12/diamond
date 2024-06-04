@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES6",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "CommonJS",
+    "module": "ESNext",
     "moduleResolution": "Node",
     "noImplicitAny": true,
     "rootDir": "./src",
@@ -13,7 +13,8 @@
     "useUnknownInCatchVariables": false,
     "skipLibCheck": true,
     "strictPropertyInitialization": false,
-    "allowImportingTsExtensions": true
+    "emitDeclarationOnly": true,
+    "isolatedModules": true,
   },
   "include": [
     "src/**/*"

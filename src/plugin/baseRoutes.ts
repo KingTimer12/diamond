@@ -1,6 +1,6 @@
 import fastify, { FastifyInstance, FastifyPluginCallback, FastifyPluginOptions } from 'fastify'
 import fp from 'fastify-plugin'
-import { AbstractBaseController, AbstractBaseRoute, BaseRoute, IBaseController } from './base/baseClass'
+import { AbstractBaseController, AbstractBaseRoute, BaseRoute, IBaseController } from './base/baseClass.js'
 
 interface RoutesOptions {
     prefix?: string

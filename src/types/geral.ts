@@ -1,5 +1,5 @@
 import { FastifyPluginCallback } from 'fastify'
-import { AbstractBaseController, AbstractBaseRoute } from '../plugin/base/baseClass'
+import { AbstractBaseController, AbstractBaseRoute } from '../plugin/base/baseClass.js'
 
 declare module 'fastify' {
     export interface FastifyInstance {

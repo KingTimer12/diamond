@@ -1,16 +1,17 @@
 import Fastify, { FastifyInstance, FastifyListenOptions, FastifyPluginCallback } from 'fastify'
 import chalk from "chalk";
 
-import { RoutesOptions } from './types/routes'
-import { RouteManager, RouteController } from './route-manager'
-import routesPlugin from './plugin/routes'
-import baseRoutesPlugin from './plugin/baseRoutes'
+import { RoutesOptions } from './types/routes.js'
+import { RouteManager, RouteController } from './route-manager.js'
+import routesPlugin from './plugin/routes.js'
+import baseRoutesPlugin from './plugin/baseRoutes.js'
 
 const queue: RoutesOptions[] = []
 
 export function start(options: FastifyListenOptions) {
     options.port = options.port ?? 3333
     build().then(app => {
+        app.printRoutes()
         app.listen(options, () => {
             // console.clear()
             console.log(`${chalk.cyan("♦️ Diamond Tool ♦️")}`)
@@ -21,14 +22,12 @@ export function start(options: FastifyListenOptions) {
 }
 
 export function routes(options: RoutesOptions): void {
-    console.log(options)
-    if (!options)
+    if (options)
         queue.push(options)
 }
 
 export function useRoute(path: string, callback: FastifyPluginCallback): void {
     const { addRoute } = RouteController()
-    console.log("use")
     addRoute(path, callback)
 }
 
@@ -41,7 +40,6 @@ const server: FastifyInstance = Fastify()
 async function build() {
     await server.register(routesPlugin)
     await server.register(baseRoutesPlugin)
-    console.log(queue)
     if (queue.length)
         for (const q of queue)
             await createRoutes(q)
@@ -55,7 +53,6 @@ async function createRoutes(options?: RoutesOptions) {
     if (!server.useRoute)
         return
     const { useRouteIndex, useRouteManager, useRouteSet } = RouteManager()
-    // console.log(options)
     if (options?.index) {
         await useRouteIndex(server, options.index)
     } else if (options?.managerFile) {
