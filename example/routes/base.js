@@ -1,7 +1,7 @@
 import { AbstractBaseRoute } from "diamond"
 
 export default class CustomBaseRoute extends AbstractBaseRoute {
-    setup(controller) {
+    setup(controller, secutiry) {
         const { fetchAll, fetchOne, create, update, destroy } = new controller()
         this.server.get("/all", fetchAll)
         this.server.get("/:id", fetchOne)

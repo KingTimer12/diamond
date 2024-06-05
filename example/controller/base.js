@@ -1,6 +1,6 @@
 import { AbstractBaseController } from "diamond"
 
-export default class BaseController extends AbstractBaseController {
+class BaseController extends AbstractBaseController {
     
     /**
      * @param {import("fastify").FastifyRequest} request
@@ -42,3 +42,6 @@ export default class BaseController extends AbstractBaseController {
         return reply.status(204).send()
     }
 }
+
+export default BaseController
+export { BaseController }
