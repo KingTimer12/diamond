@@ -1,6 +1,6 @@
 <p align="center">
   <a href="" rel="noopener">
- <img width=200px height=200px src="https://c4.wallpaperflare.com/wallpaper/346/359/601/anime-houseki-no-kuni-diamond-houseki-no-kuni-wallpaper-preview.jpg" alt="Diamond Tool"></a>
+ <img width=400px height=250px src="https://c4.wallpaperflare.com/wallpaper/346/359/601/anime-houseki-no-kuni-diamond-houseki-no-kuni-wallpaper-preview.jpg" alt="Diamond Tool"></a>
 </p>
 
 <h3 align="center">Diamond Tool</h3>
