@@ -60,7 +60,7 @@ pnpm install
 pnpm build:dev
 ```
 
-## Teconologias <a name = "built_using"></a>
+## Tecnologias <a name = "built_using"></a>
 
 - [Prisma](https://www.prisma.io/) - Database Framework
 - [Fastify](https://fastify.dev/) - Server Framework
