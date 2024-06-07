@@ -35,7 +35,7 @@ Como que funciona essa facilidade? Além dos hooks, há classes customizáveis q
 
 ## Começando <a name = "getting_started"></a>
 
-### Prerequisites
+### Pré requisitos
 
 Se seu objetivo for ajudar em algo, é necessário ter **Git**, **Node** e um gerenciador de pacotes de sua preferência, por exemplo: **pnpm**
 
