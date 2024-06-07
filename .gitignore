@@ -67,3 +67,4 @@ eng.traineddata
 
 dist
 *.yaml
+*.lock
