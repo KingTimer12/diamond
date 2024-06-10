@@ -20,18 +20,30 @@ CLASS FATHER
 
 interface DiamondTools {}
 
+interface IBaseRoute extends DiamondTools {
+    setup<C extends AbstractBaseController>(controller: new () => C, secutiry?: boolean): void
+}
+
+interface IBaseController extends DiamondTools {
+    create(request: FastifyRequest, reply: FastifyReply): void
+    fetchAll(request: FastifyRequest, reply: FastifyReply): void
+    fetchOne(request: FastifyRequest, reply: FastifyReply): void
+    update(request: FastifyRequest, reply: FastifyReply): void
+    destroy(request: FastifyRequest, reply: FastifyReply): void
+}
+
 /*
 ROUTE TYPES
 */
 
-export abstract class AbstractBaseRoute implements DiamondTools {
+export abstract class AbstractBaseRoute implements IBaseRoute {
     protected server: FastifyInstance
 
     constructor(server: FastifyInstance) {
         this.server = server
     }
 
-    abstract setup<C extends AbstractBaseController>(controller: new () => C, secutiry?: boolean): void
+    public abstract setup<C extends AbstractBaseController>(controller: new () => C, secutiry?: boolean): void
 }
 
 export class BaseRoute extends AbstractBaseRoute {
@@ -49,7 +61,7 @@ export class BaseRoute extends AbstractBaseRoute {
 CONTROLLER TYPES
 */
 
-export abstract class AbstractBaseController implements DiamondTools {
+export abstract class AbstractBaseController implements IBaseController {
     // CRUD
     public abstract create(request: FastifyRequest, reply: FastifyReply): void
     public abstract fetchAll(request: FastifyRequest, reply: FastifyReply): void
@@ -84,11 +96,9 @@ export function useController<R extends AbstractBaseRoute, C extends AbstractBas
     (server: FastifyInstance, controller?: new () => C, secutiry?: boolean, route?: new (server: FastifyInstance) => R) {
         const RouteClass = route ?? (baseDefault.route ? baseDefault.route() : BaseRoute)
         const routeInstance = createInstance(RouteClass, server)
-        const ControllerDefaultClass = baseDefault.controller && baseDefault.controller()
-        if (!controller && ControllerDefaultClass)
-            routeInstance.setup(ControllerDefaultClass, secutiry)
-        else if (controller)
-            routeInstance.setup(controller, secutiry)
+        const ControllerDefaultClass = controller ?? (baseDefault.controller ? baseDefault.controller() : EmptyBaseController)
+        routeInstance.setup(ControllerDefaultClass, secutiry)
+        return new ControllerDefaultClass()
 }
 
 export function setupBase(options: IBaseDefault) {

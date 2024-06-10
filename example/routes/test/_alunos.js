@@ -6,9 +6,9 @@ import { AlunosController } from '../../controller/index.js'
  * @param {import("fastify").FastifyInstance} fastify 
  */
 function route(fastify, opts, next) {
-    useController(fastify, AlunosController)
+    const { fetch } = useController(fastify, AlunosController)
     // useController(fastify, BaseController) Use if you don't use setupBase
-    // fastify.get("/", (req, res) => res.status("200").send("abc")) Manual use
+    fastify.get("/fetch", fetch) // Manual use
     next()
 }
 
