@@ -1,8 +1,7 @@
 import { FastifyInstance, FastifyPluginCallback, FastifyPluginOptions } from 'fastify'
 import fp from 'fastify-plugin'
 import { createSigner, createVerifier, SignerOptions } from 'fast-jwt'
-
-type AuthSign = SignerOptions
+import { AuthSign } from '../types/geral'
 
 function useSign(payload: { [key: string]: any }, sign: AuthSign) {
     const sync = createSigner(sign)
@@ -19,10 +18,10 @@ const Auth: FastifyPluginCallback<AuthSign> = (
     options: FastifyPluginOptions,
     done
 ) => {
-    server.decorate('auth.sign', (payload: { [key: string]: any }): string => {
+    server.decorate('useSign', (payload: { [key: string]: any }): string => {
         return useSign(payload, options)
     })
-    server.decorate('auth.verify', (token: string): string => {
+    server.decorate('useVerify', (token: string): { [key: string]: any } => {
         return useVerify(token, options.key)
     })
 

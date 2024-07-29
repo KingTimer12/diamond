@@ -1,14 +1,17 @@
+import { SignerOptions } from 'fast-jwt'
 import { FastifyPluginCallback } from 'fastify'
 
 declare module 'fastify' {
     export interface FastifyInstance {
         useRoute(path: string, callback: FastifyPluginCallback): void
-        auth: {
-            sign(payload: { [key: string]: any }): string
-            verify(token: string): { [key: string]: any }
-        }
+        useSign(payload: { [key: string]: any }): string
+        useVerify(token: string): { [key: string]: any }
     }
 }
+
+export type AuthSign = Partial<SignerOptions & {
+    key: string;
+}>
 
 type ESClass = {
     prototype: unknown

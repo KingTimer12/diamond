@@ -21,7 +21,7 @@ CLASS FATHER
 interface DiamondTools {}
 
 interface IBaseRoute extends DiamondTools {
-    setup<C extends AbstractBaseController>(controller: new () => C, secutiry?: boolean): void
+    setup<C extends AbstractBaseController>(controller: C, secutiry?: boolean): void
 }
 
 interface IBaseController extends DiamondTools {
@@ -43,12 +43,11 @@ export abstract class AbstractBaseRoute implements IBaseRoute {
         this.server = server
     }
 
-    public abstract setup<C extends AbstractBaseController>(controller: new () => C, secutiry?: boolean): void
+    public abstract setup<C extends AbstractBaseController>(controller: C, secutiry?: boolean): void
 }
 
 export class BaseRoute extends AbstractBaseRoute {
-    setup<C extends AbstractBaseController>(controller: new () => C, secutiry?: boolean): void {
-        const { fetchAll, fetchOne, create, update, destroy } = new controller()
+    setup<C extends AbstractBaseController>({ fetchAll, fetchOne, create, update, destroy }: C, secutiry?: boolean): void {
         this.server.get("/", fetchAll)
         this.server.get("/:id", fetchOne)
         this.server.post("/", create)
@@ -62,6 +61,7 @@ CONTROLLER TYPES
 */
 
 export abstract class AbstractBaseController implements IBaseController {
+
     // CRUD
     public abstract create(request: FastifyRequest, reply: FastifyReply): void
     public abstract fetchAll(request: FastifyRequest, reply: FastifyReply): void
@@ -97,8 +97,10 @@ export function useController<R extends AbstractBaseRoute, C extends AbstractBas
         const RouteClass = route ?? (baseDefault.route ? baseDefault.route() : BaseRoute)
         const routeInstance = createInstance(RouteClass, server)
         const ControllerDefaultClass = controller ?? (baseDefault.controller ? baseDefault.controller() : EmptyBaseController)
-        routeInstance.setup(ControllerDefaultClass, secutiry)
-        return new ControllerDefaultClass()
+        const controllerInstance = createInstance(ControllerDefaultClass)
+
+        routeInstance.setup(controllerInstance, secutiry)
+        return controllerInstance
 }
 
 export function setupBase(options: IBaseDefault) {

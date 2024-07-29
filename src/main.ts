@@ -1,19 +1,17 @@
-import Fastify, { FastifyInstance, FastifyListenOptions, FastifyPluginCallback } from 'fastify'
 import chalk from "chalk";
-import { SignerOptions } from 'fast-jwt'
+import Fastify, { FastifyInstance, FastifyListenOptions, FastifyPluginCallback } from 'fastify';
 
-import { RoutesOptions } from './types/routes.js'
-import { RouteManager, RouteController } from './route-manager.js'
-import routesPlugin from './plugin/routes.js'
 import authPlugin from './plugin/auth.js';
+import routesPlugin from './plugin/routes.js';
+import { RouteController, RouteManager } from './route-manager.js';
+import { AuthSign } from './types/geral.js';
+import { RoutesOptions } from './types/routes.js';
 
 const queue: RoutesOptions[] = []
 
 interface DiamondOptions {
-    prefix: string,
-    auth: {
-        options: SignerOptions
-    }
+    prefix?: string,
+    auth?: AuthSign,
 }
 
 interface Diamond extends FastifyListenOptions, DiamondOptions {}
@@ -21,11 +19,15 @@ interface Diamond extends FastifyListenOptions, DiamondOptions {}
 export function start(options: Diamond) {
     options.port = options.port ?? 3333
     build(options).then(app => {
-        app.listen(options, () => {
+        app.listen(options, (err, addr) => {
+            if (err) {
+                app.log.error(err)
+                process.exit(1)
+            }
             // console.clear()
             console.log(`${chalk.cyan("♦️ Diamond Tool ♦️")}`)
             console.log(`${chalk.white("API is running in port:")} ${chalk.cyan(`${options.port}`)}`)
-            console.log(`${chalk.white("Host to quick access:")} ${chalk.cyan(`http://${options.host}:${options.port}`)}`)
+            console.log(`${chalk.white("Host to quick access:")} ${chalk.cyan(addr)}`)
         })
     })
 }
@@ -44,16 +46,17 @@ export function useRoute(path: string, callback: FastifyPluginCallback): void {
  * PRIVATE FUNC & VAR
 */
 
-const server: FastifyInstance = Fastify()
+const server: FastifyInstance = Fastify({ logger: true })
 
 async function build(config?: DiamondOptions) {
+    await server.register(authPlugin, config?.auth)
     await server.register(routesPlugin, { prefix: config?.prefix })
-    await server.register(authPlugin, config?.auth.options ?? {})
     if (queue.length)
         for (const q of queue)
             await createRoutes(q)
     else
         await createRoutes()
+
     await server.ready()
     return server
 }

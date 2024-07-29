@@ -15,7 +15,7 @@ class BaseController extends AbstractBaseController {
      * @param {import("fastify").FastifyReply} reply 
     */
     fetchAll(request, reply) {
-        return reply.status(200).send('fetchAll')
+        return reply.status(200).send('fetchAll Base')
     }
 
     /**

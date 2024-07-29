@@ -11,4 +11,8 @@ setupBase({
     }
 })
 routes({ managerFile: 'example/routes' })
-start({ port: 3030 })
+start({ 
+    port: 3030, 
+    auth: { algorithm: "HS256", key: "secret" },
+    notFound: "Rota não encontrada, verifique se não errou nada na URL."
+})
