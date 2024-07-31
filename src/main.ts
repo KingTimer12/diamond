@@ -1,17 +1,24 @@
 import chalk from "chalk";
-import Fastify, { FastifyInstance, FastifyListenOptions, FastifyPluginCallback } from 'fastify';
+import Fastify, { FastifyInstance, FastifyListenOptions, FastifyPluginCallback, FastifyReply, HookHandlerDoneFunction } from 'fastify';
+import cors, { FastifyCorsOptions } from '@fastify/cors'
 
 import authPlugin from './plugin/auth.js';
 import routesPlugin from './plugin/routes.js';
 import { RouteController, RouteManager } from './route-manager.js';
 import { AuthSign } from './types/geral.js';
-import { RoutesOptions } from './types/routes.js';
+import { JWTOptions, RoutesOptions } from './types/routes.js';
 
 const queue: RoutesOptions[] = []
+
+let useJwt: JWTOptions | undefined = undefined
 
 interface DiamondOptions {
     prefix?: string,
     auth?: AuthSign,
+    cors?: FastifyCorsOptions,
+    debug?: {
+        routes?: boolean
+    }
 }
 
 interface Diamond extends FastifyListenOptions, DiamondOptions {}
@@ -28,6 +35,10 @@ export function start(options: Diamond) {
             console.log(`${chalk.cyan("♦️ Diamond Tool ♦️")}`)
             console.log(`${chalk.white("API is running in port:")} ${chalk.cyan(`${options.port}`)}`)
             console.log(`${chalk.white("Host to quick access:")} ${chalk.cyan(addr)}`)
+            if (options.debug?.routes) {
+                console.log(`${chalk.cyan("Routes:")}`)
+                console.log(`${chalk.white(app.printRoutes())}`)
+            }
         })
     })
 }
@@ -42,6 +53,12 @@ export function useRoute(path: string, callback: FastifyPluginCallback): void {
     addRoute(path, callback)
 }
 
+export function jwt(callback: (server: FastifyInstance, reply: FastifyReply, next: HookHandlerDoneFunction, token?: string) => void) {
+    if (useJwt)
+        throw Error("JWT already registered.")
+    useJwt = { callback }
+}
+
 /**
  * PRIVATE FUNC & VAR
 */
@@ -49,13 +66,26 @@ export function useRoute(path: string, callback: FastifyPluginCallback): void {
 const server: FastifyInstance = Fastify({ logger: true })
 
 async function build(config?: DiamondOptions) {
-    await server.register(authPlugin, config?.auth)
     await server.register(routesPlugin, { prefix: config?.prefix })
+    if (config?.cors)
+        await server.register(cors, config.cors)
+    if (config?.auth)
+        await server.register(authPlugin, config.auth)
     if (queue.length)
         for (const q of queue)
             await createRoutes(q)
     else
         await createRoutes()
+
+    if (config?.auth && useJwt) {
+        server.jwt(server).register(useJwt)
+        // server.addHook('preHandler', (req, res, next) => {
+        //     if (!routesJWT.includes(req.routerPath))
+        //         return next()
+        //     const token = req.headers.authorization
+        //     useJwt?.callback(req.server, res, next, token)
+        // })
+    }
 
     await server.ready()
     return server
@@ -73,3 +103,8 @@ async function createRoutes(options?: RoutesOptions) {
         await useRouteSet(server)
     }
 }
+// server.jwt = JWTRoutes
+// server.jwt.post = (route: string, handler) => {
+//     routesJWT.push(route)
+//     return server.post(route, handler)
+// }

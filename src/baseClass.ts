@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { JWTRoutes } from "./types/geral";
 
 interface IBaseDefault<R extends AbstractBaseRoute = BaseRoute, C extends AbstractBaseController = EmptyBaseController> {
     route?: () => new (server: FastifyInstance) => R,
@@ -41,6 +42,10 @@ export abstract class AbstractBaseRoute implements IBaseRoute {
 
     constructor(server: FastifyInstance) {
         this.server = server
+    }
+
+    protected jwt(): JWTRoutes {
+        return this.server.jwt(this.server)
     }
 
     public abstract setup<C extends AbstractBaseController>(controller: C, secutiry?: boolean): void
