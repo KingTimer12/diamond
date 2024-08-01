@@ -17,7 +17,8 @@ routes({ managerFile: 'example/routes' })
 
 start({
     port: 3030,
-    // debug: { routes: true },
+    prefix: 'v1',
+    debug: { routes: true },
     auth: { algorithm: "HS256", key: "secret" },
     cors: { origin: "*" },
     notFound: "Rota não encontrada, verifique se não errou nada na URL."

@@ -6,7 +6,7 @@ interface RoutesOptions {
 }
 
 function useRoute(server: FastifyInstance, path: string, callback: FastifyPluginCallback, prefix?: string) {
-    const finalPath = prefix ? prefix.replace(`/`, ``).concat(path.replace(`/`, ``)) : path.replace(`/`, ``)
+    const finalPath = prefix ? prefix.replace(`/`, ``).concat(path) : path.replace(`/`, ``)
     server.register(callback, { prefix: finalPath })
 }
 

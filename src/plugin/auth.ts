@@ -46,12 +46,10 @@ function useJWT(server: FastifyInstance): JWTRoutes {
     function register(useJwt: JWTOptions) {
         console.log(routesJWT)
         server.addHook('preHandler', (req, res, next) => {
-            console.log(req.url)
-            console.log(req.method)
-            if (!routesJWT.find(f => f.route === req.url && f.method === req.method))
+            if (!routesJWT.find(f => f.route === req.routeOptions.url && f.method === req.method))
                 return next()
             const token = req.headers.authorization
-            useJwt?.callback(req.server, res, next, token)
+            useJwt?.callback(res, next, token)
         })
     }
 
@@ -70,10 +68,10 @@ const Auth: FastifyPluginCallback<AuthSign> = (
     options: FastifyPluginOptions,
     done
 ) => {
-    server.decorate('useSign', (payload: { [key: string]: any }): string => {
+    server.decorateRequest('useSign', (payload: { [key: string]: any }): string => {
         return useSign(payload, options)
     })
-    server.decorate('useVerify', (token: string): { [key: string]: any } => {
+    server.decorateReply('useVerify', (token: string): { [key: string]: any } => {
         return useVerify(token, options.key)
     })
     server.decorate('jwt', (server: FastifyInstance) => useJWT(server))

@@ -31,7 +31,7 @@ export function start(options: Diamond) {
                 app.log.error(err)
                 process.exit(1)
             }
-            // console.clear()
+            console.clear()
             console.log(`${chalk.cyan("♦️ Diamond Tool ♦️")}`)
             console.log(`${chalk.white("API is running in port:")} ${chalk.cyan(`${options.port}`)}`)
             console.log(`${chalk.white("Host to quick access:")} ${chalk.cyan(addr)}`)
@@ -53,7 +53,7 @@ export function useRoute(path: string, callback: FastifyPluginCallback): void {
     addRoute(path, callback)
 }
 
-export function jwt(callback: (server: FastifyInstance, reply: FastifyReply, next: HookHandlerDoneFunction, token?: string) => void) {
+export function jwt(callback: (reply: FastifyReply, next: HookHandlerDoneFunction, token?: string) => void) {
     if (useJwt)
         throw Error("JWT already registered.")
     useJwt = { callback }
@@ -77,15 +77,8 @@ async function build(config?: DiamondOptions) {
     else
         await createRoutes()
 
-    if (config?.auth && useJwt) {
+    if (config?.auth && useJwt)
         server.jwt(server).register(useJwt)
-        // server.addHook('preHandler', (req, res, next) => {
-        //     if (!routesJWT.includes(req.routerPath))
-        //         return next()
-        //     const token = req.headers.authorization
-        //     useJwt?.callback(req.server, res, next, token)
-        // })
-    }
 
     await server.ready()
     return server
@@ -103,8 +96,3 @@ async function createRoutes(options?: RoutesOptions) {
         await useRouteSet(server)
     }
 }
-// server.jwt = JWTRoutes
-// server.jwt.post = (route: string, handler) => {
-//     routesJWT.push(route)
-//     return server.post(route, handler)
-// }

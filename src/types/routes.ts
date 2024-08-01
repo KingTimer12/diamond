@@ -6,5 +6,5 @@ export type RoutesOptions = {
 }
 
 export type JWTOptions = {
-    callback: (server: FastifyInstance, reply: FastifyReply, next: HookHandlerDoneFunction, token?: string) => void
+    callback: (reply: FastifyReply, next: HookHandlerDoneFunction, token?: string) => void
 }

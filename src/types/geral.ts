@@ -1,5 +1,5 @@
 import { SignerOptions } from 'fast-jwt'
-import { FastifyInstance, FastifyPluginCallback, RouteHandlerMethod } from 'fastify'
+import { FastifyPluginCallback, RouteHandlerMethod } from 'fastify';
 import { JWTOptions } from './routes'
 
 export interface JWTRoutes {
@@ -12,10 +12,14 @@ export interface JWTRoutes {
 }
 
 declare module 'fastify' {
+    export interface FastifyReply {
+        useVerify(token: string): { [key: string]: any },
+    }
+    export interface FastifyRequest {
+        useSign(payload: { [key: string]: any }): string
+    }
     export interface FastifyInstance {
         useRoute(path: string, callback: FastifyPluginCallback): void
-        useSign(payload: { [key: string]: any }): string
-        useVerify(token: string): { [key: string]: any },
         jwt(server: FastifyInstance): JWTRoutes
     }
 }

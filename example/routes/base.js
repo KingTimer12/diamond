@@ -9,12 +9,11 @@ export default class CustomBaseRoute extends AbstractBaseRoute {
         // this.server.get("/all", fetchAll)
         // this.server.get("/:id", fetchOne)
         // Certo:
-        this.server.get("/:id", fetchOne)
-        jwt.get("/all", fetchAll)
+        jwt.get("/:id", fetchOne)
+        this.server.get("/all", fetchAll)
         
         jwt.post("/", create)
         jwt.put("/:id", update)
         jwt.delete("/:id", destroy)
-
     }
 }
