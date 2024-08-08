@@ -1,5 +1,5 @@
 import { start, routes, useRoute, jwt } from "./main.js"
-import { AbstractBaseController, AbstractBaseRoute, useController, setupBase } from "./baseClass.js"
+import { AbstractBaseController, AbstractBaseRoute, useController, setupBase } from "./modules/baseClass.js"
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 

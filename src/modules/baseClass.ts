@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { JWTRoutes } from "./types/geral";
+import { JWTRoutes } from "../types/geral";
 
 interface IBaseDefault<R extends AbstractBaseRoute = BaseRoute, C extends AbstractBaseController = EmptyBaseController> {
     route?: () => new (server: FastifyInstance) => R,

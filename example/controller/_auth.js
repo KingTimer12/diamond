@@ -1,5 +1,9 @@
 import BaseController from "./base.js";
 
+// const AuthController = () => {
+
+// }
+
 class AuthController extends BaseController {
     /**
      * @param {import("fastify").FastifyRequest} request

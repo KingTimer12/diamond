@@ -18,7 +18,10 @@ interface DiamondOptions {
     cors?: FastifyCorsOptions,
     debug?: {
         routes?: boolean
-    }
+    },
+    onPreRegister?: (server: FastifyInstance) => Promise<void>
+    onPreRoutes?: (server: FastifyInstance) => Promise<void>
+    onFinish?: (server: FastifyInstance) => Promise<void>
 }
 
 interface Diamond extends FastifyListenOptions, DiamondOptions {}
@@ -66,11 +69,18 @@ export function jwt(callback: (reply: FastifyReply, next: HookHandlerDoneFunctio
 const server: FastifyInstance = Fastify({ logger: true })
 
 async function build(config?: DiamondOptions) {
+    if (config?.onPreRegister)
+        await config.onPreRegister(server)
+    
     await server.register(routesPlugin, { prefix: config?.prefix })
     if (config?.cors)
         await server.register(cors, config.cors)
     if (config?.auth)
         await server.register(authPlugin, config.auth)
+
+    if (config?.onPreRoutes)
+        await config.onPreRoutes(server)
+
     if (queue.length)
         for (const q of queue)
             await createRoutes(q)
@@ -79,6 +89,9 @@ async function build(config?: DiamondOptions) {
 
     if (config?.auth && useJwt)
         server.jwt(server).register(useJwt)
+
+    if (config?.onFinish)
+        await config.onFinish(server)
 
     await server.ready()
     return server

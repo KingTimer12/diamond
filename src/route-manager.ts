@@ -2,7 +2,7 @@ import { FastifyInstance, FastifyPluginCallback, FastifyPluginOptions } from 'fa
 import { readdir } from 'node:fs/promises';
 import { relative, join } from "node:path";
 import { ESModule } from './types/geral.js';
-import { AbstractBaseRoute } from './baseClass.js';
+import { AbstractBaseRoute } from './modules/baseClass.js';
 
 const routes = new Set<{ path: string, callback: FastifyPluginCallback }>()
 
@@ -41,7 +41,7 @@ const RouteManager = () => {
             }
         }
     }
-    
+
     async function useRouteSet(app: FastifyInstance) {
         const { registerRoutes } = RouteController()
         await app.register(registerRoutes)
