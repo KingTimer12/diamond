@@ -1,5 +1,5 @@
 {
-  "name": "diamond",
+  "name": "@novelbrasil/diamond",
   "version": "1.0.0",
   "type": "module",
   "description": "A Node.js library that helpful in creation of RestAPI",
@@ -9,11 +9,12 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "type-check:watch": "pnpm type-check -- --watch",
-    "build": "pnpm build:types && pnpm build:js",
+    "build": "npm run build:types && npm run build:js",
     "build:dev": "pnpm build && pnpm dev",
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline",
-    "dev": "node example/index.js"
+    "dev": "node example/index.js",
+    "prepublishOnly": "npm run build"
   },
   "license": "MIT",
   "files": [
